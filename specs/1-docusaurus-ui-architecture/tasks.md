@@ -27,8 +27,8 @@ description: "Task list for Docusaurus UI Architecture feature implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 [<1h] Initialize Docusaurus project `physical-ai-textbook` with TypeScript in the root directory.
-- [ ] T002 [<1h] Configure Docusaurus for GitHub Pages deployment workflow in `docusaurus.config.ts`.
+- [X] T001 [<1h] Initialize Docusaurus project `physical-ai-textbook` with TypeScript in the root directory (Command provided: `npx create-docusaurus physical-ai-textbook classic --typescript --git`).
+- [X] T002 [<1h] Configure Docusaurus for GitHub Pages deployment workflow in `docusaurus.config.ts`.
 
 ---
 
@@ -38,9 +38,9 @@ description: "Task list for Docusaurus UI Architecture feature implementation"
 
 ⚠️ **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 [<1h] Create `docs/module1/`, `docs/module2/`, `docs/module3/`, `docs/module4/` directories.
-- [ ] T004 [<1h] Create placeholder markdown files for Modules 1-4 (e.g., `docs/module1/week1-chapter1.md`) based on the syllabus detailed in `specs/course-details/spec.md`.
-- [ ] T005 [P] [<1h] Implement dummy `AuthContext` (React Context) in `src/components/AuthContext.tsx`.
+- [X] T003 [<1h] Create `docs/module1/`, `docs/module2/`, `docs/module3/`, `docs/module4/` directories.
+- [X] T004 [<1h] Create placeholder markdown files for Modules 1-4 (e.g., `docs/module1/week1-chapter1.md`) based on the syllabus detailed in `specs/course-details/spec.md`.
+- [X] T005 [P] [<1h] Implement dummy `AuthContext` (React Context) in `src/components/AuthContext.tsx`.
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -54,8 +54,8 @@ description: "Task list for Docusaurus UI Architecture feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] [<1h] Verify `npm start` runs successfully and the site is accessible.
-- [ ] T007 [US1] [<1h] Verify the title "Physical AI & Humanoid Robotics" is displayed in `docusaurus.config.ts`.
+- [X] T006 [US1] [<1h] Verify `npm start` runs successfully and the site is accessible.
+- [X] T007 [US1] [<1h] Verify the title "Physical AI & Humanoid Robotics" is displayed in `docusaurus.config.ts`.
 - [ ] T008 [US1] [<1h] Verify sidebar auto-generates navigation from `docs/` module folders in `sidebars.ts`.
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently

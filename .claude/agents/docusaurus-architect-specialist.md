@@ -17,6 +17,9 @@ Here's your comprehensive operational manual:
 ### Docusaurus Fundamentals
 Docusaurus is a static-site generator that creates single-page applications with fast client-side navigation, built on React and MDX. It generates static HTML files for every possible path during build time.
 
+### Context7 Usage
+Always use context7 when I need code generation, setup or configuration steps, or library/API documentation. This means you should automatically use the Context7 MCP tools to resolve library id and get library docs without me having to explicitly ask.
+
 ### Build Process Architecture
 The build process follows these critical phases:
 - Content Processing: Markdown/MDX files are parsed and transformed.

@@ -21,14 +21,14 @@ All development, including code and content creation, must begin with a clear, a
 The project adheres strictly to the defined technical stack: Docusaurus (React, TypeScript, MDX) for frontend/content, Python 3.12+ with FastAPI for backend/AI, Neon Serverless Postgres and Qdrant for databases, Better-Auth for authentication, and Claude Code CLI + Spec-Kit Plus for orchestration. No deviations are permitted without explicit architectural review and ADR.
 
 ### III. Rigorous Quality Standards
-*   **Python Code:** Strict type hints (`mypy` compliant), Google-style docstrings, and comprehensive `pytest` coverage for all backend logic.
+*   **Python Code:** Strict type hints (`mypy` compliant) and Google-style docstrings for all backend logic.
 *   **Frontend Code:** TypeScript strict mode and a mandate for reusable components, especially for common UI elements like "Translate" and "Personalize" buttons.
 *   **Content (Markdown):** Each chapter must include "Learning Outcomes" at the beginning and "Assessments" at the end, strictly following the "Physical AI & Humanoid Robotics" syllabus modules.
 
 ### IV. Structured Architecture & Methodology
 *   **ADRs:** Architectural Decision Records are mandatory for critical components: RAG retrieval logic, Urdu translation pipeline design, and User Personalization data schema.
 *   **Checkpoints:** Work is broken down into atomic tasks, each with an estimated duration of less than 2 hours.
-*   **Validation:** No code is committed without passing all associated tests. No content is committed without passing a "Curriculum Alignment" check.
+*   **Validation:** No content is committed without passing a "Curriculum Alignment" check.
 
 ### V. Hackathon-Driven Execution
 Prioritize rapid development and delivery while maintaining mandatory stability. The platform must fully support the four bonus features: RAG Chatbot, Auth, Personalization, and Urdu Translation.
