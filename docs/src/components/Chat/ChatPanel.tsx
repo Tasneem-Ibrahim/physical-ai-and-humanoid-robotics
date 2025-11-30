@@ -24,7 +24,7 @@ interface ChatPanelProps {
 type PanelSize = 'small' | 'medium' | 'large';
 
 // Hardcoded for now - in production, use environment variables via docusaurus.config.js customFields
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://ai-rative-book-backend-production.up.railway.app';
 const API_KEY = 'fwnelrjrl2ur08d9s0fsdhf90324h30493';
 
 // Regex to detect redirect commands in response

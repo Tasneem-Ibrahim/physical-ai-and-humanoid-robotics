@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
 // Better-Auth compatible API URL
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://ai-rative-book-backend-production.up.railway.app/api';
 
 interface UserBackground {
   programming_experience: string;
