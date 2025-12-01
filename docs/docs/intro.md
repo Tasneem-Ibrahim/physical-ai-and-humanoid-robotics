@@ -41,7 +41,7 @@ Combine LLMs with robotics for voice-controlled autonomous systems.
 
 ## Getting Started
 
-Start with [Introduction to Physical AI](/docs/module-01/intro-physical-ai) to begin your journey into the world of embodied intelligence.
+Start with [Introduction to Physical AI](/docs/module1/week1-intro-physical-ai) to begin your journey into the world of embodied intelligence.
 
 :::tip AI Assistant
 Use the **AI Chat** button in the bottom-right corner to ask questions about any topic in this textbook!
