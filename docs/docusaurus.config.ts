@@ -72,7 +72,7 @@ const config: Config = {
           items: [
             {
               label: 'Module 1: ROS 2 Fundamentals',
-              to: '/docs/module-01/intro-physical-ai',
+              to: '/docs/module1/week1-intro-physical-ai',
             },
             {
               label: 'Module 2: Gazebo Simulation',
@@ -102,7 +102,7 @@ const config: Config = {
             },
             {
               label: 'Module 1: ROS 2',
-              to: '/docs/module-01/intro-physical-ai',
+              to: '/docs/module1/week1-intro-physical-ai',
             },
             {
               label: 'Module 2: Simulation',
@@ -114,12 +114,12 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Panaversity',
-              href: 'https://panaversity.org',
+              label: 'BasenAI GitHub',
+              href: 'https://github.com/orgs/basenai/dashboard',
             },
             {
-              label: 'PIAIC',
-              href: 'https://piaic.org',
+              label: 'BasenAI LinkedIn',
+              href: 'https://www.linkedin.com/company/basenai',
             },
           ],
         },

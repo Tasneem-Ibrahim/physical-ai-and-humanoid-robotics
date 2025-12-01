@@ -20,7 +20,7 @@ function HeroSection() {
           <Link to="/docs" className={styles.primaryButton}>
             Start Learning
           </Link>
-          <Link to="/docs/module-01/intro-physical-ai" className={styles.secondaryButton}>
+          <Link to="/docs/module1/week1-intro-physical-ai" className={styles.secondaryButton}>
             View Modules
           </Link>
         </div>
@@ -35,7 +35,7 @@ const modules = [
     title: 'ROS 2 Fundamentals',
     subtitle: 'The Robotic Nervous System',
     description: 'Master nodes, topics, services, and URDF. Learn the middleware that connects all robot components.',
-    link: '/docs/module-01/intro-physical-ai',
+    link: '/docs/module1/week1-intro-physical-ai',
   },
   {
     number: '02',
