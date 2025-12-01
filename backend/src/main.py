@@ -7,13 +7,15 @@ from src.api.auth import router as auth_router
 
 app = FastAPI(title="Physical AI Textbook RAG Chatbot")
 
-# CORS middleware for frontend integration
+# CORS middleware for frontend integration - configured for mobile browser compatibility
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify exact origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],  # Allow all origins for mobile compatibility
+    allow_credentials=False,  # Must be False when allow_origins is "*"
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "X-API-Key", "X-User-ID", "X-Current-Page", "Accept", "Origin"],
+    expose_headers=["Content-Type", "Content-Length"],
+    max_age=86400,  # Cache preflight requests for 24 hours
 )
 
 app.include_router(ingest_router, prefix="/api")

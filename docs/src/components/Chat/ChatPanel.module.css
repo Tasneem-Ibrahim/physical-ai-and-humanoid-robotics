@@ -284,13 +284,20 @@
 }
 
 .error {
-  padding: 10px;
+  padding: 10px 14px;
   background: var(--ifm-color-danger-lightest);
   color: var(--ifm-color-danger-darkest);
   border-radius: 8px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.errorButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 .error button {
@@ -299,6 +306,20 @@
   color: var(--ifm-color-danger);
   cursor: pointer;
   text-decoration: underline;
+  font-size: 0.85rem;
+  padding: 4px 8px;
+}
+
+.error button:first-child {
+  background: var(--ifm-color-danger);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.error button:first-child:hover {
+  background: var(--ifm-color-danger-dark);
 }
 
 .inputArea {

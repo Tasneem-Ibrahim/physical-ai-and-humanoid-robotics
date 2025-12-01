@@ -2,8 +2,38 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import { JSX } from 'react/jsx-runtime';
 
-// Better-Auth compatible API URL
+// API Configuration
 const API_URL = 'https://ai-rative-book-backend-production.up.railway.app/api';
+
+// Helper function for mobile-friendly fetch with timeout
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeout: number = 30000
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      mode: 'cors',
+      credentials: 'omit',
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err instanceof Error && err.name === 'AbortError') {
+      throw new Error('Request timed out. Please try again.');
+    }
+    if (err instanceof Error && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError'))) {
+      throw new Error('Network error. Please check your connection.');
+    }
+    throw err;
+  }
+}
 
 interface UserBackground {
   programming_experience: string;
@@ -65,15 +95,21 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_URL}/auth/signin`, {
+      const response = await fetchWithTimeout(`${API_URL}/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Login failed');
+        let errorMessage = 'Login failed';
+        try {
+          const error = await response.json();
+          errorMessage = error.detail || error.message || errorMessage;
+        } catch {
+          errorMessage = `Login failed (${response.status})`;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -93,15 +129,21 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   const signup = async (email: string, password: string, name: string, background: UserBackground) => {
     try {
-      const response = await fetch(`${API_URL}/auth/signup`, {
+      const response = await fetchWithTimeout(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name, background }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Signup failed');
+        let errorMessage = 'Signup failed';
+        try {
+          const error = await response.json();
+          errorMessage = error.detail || error.message || errorMessage;
+        } catch {
+          errorMessage = `Signup failed (${response.status})`;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -122,9 +164,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const logout = async () => {
     try {
       if (sessionToken) {
-        await fetch(`${API_URL}/auth/signout?session_token=${sessionToken}`, {
+        await fetchWithTimeout(`${API_URL}/auth/signout?session_token=${sessionToken}`, {
           method: 'POST',
-        });
+        }, 10000); // Shorter timeout for logout
       }
     } catch (error) {
       console.error('Logout error:', error);

@@ -23,7 +23,7 @@ interface ChatPanelProps {
 
 type PanelSize = 'small' | 'medium' | 'large';
 
-// Hardcoded for now - in production, use environment variables via docusaurus.config.js customFields
+// API Configuration
 const API_URL = 'https://ai-rative-book-backend-production.up.railway.app';
 const API_KEY = 'fwnelrjrl2ur08d9s0fsdhf90324h30493';
 
@@ -33,7 +33,45 @@ const REDIRECT_REGEX = /\[\[REDIRECT:([^\]]+)\]\]/;
 // Session storage key for chat messages
 const CHAT_MESSAGES_KEY = 'physical-ai-chat-messages';
 
-export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelProps): JSX.Element {
+// Helper function to make API request with timeout and proper mobile support
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeout: number = 60000 // 60 second timeout for mobile networks
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      mode: 'cors', // Explicit CORS mode for mobile browsers
+      credentials: 'omit', // Don't send credentials for CORS
+    });
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+    
+    return response;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    
+    if (err instanceof Error) {
+      if (err.name === 'AbortError') {
+        throw new Error('Request timed out. Please check your connection and try again.');
+      }
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        throw new Error('Network error. Please check your internet connection.');
+      }
+    }
+    throw err;
+  }
+}
+
+export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelProps): React.JSX.Element {
   const { user, isAuthenticated } = useContext(AuthContext);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -127,21 +165,25 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
         headers['X-Current-Page'] = window.location.href;
       }
 
-      const response = await fetch(`${API_URL}/api/chat`, {
+      const response = await fetchWithTimeout(`${API_URL}/api/chat`, {
         method: 'POST',
-        headers,
+        headers: {
+          ...headers,
+          'Connection': 'keep-alive', // Keep connection alive for SSE
+          'Cache-Control': 'no-cache', // Prevent caching of SSE stream
+        },
         body: JSON.stringify({
           message: input,
           history: chatHistory,
           selected_text: selectedText || null,
         }),
-      });
+      }, 90000); // 90 second timeout for long responses
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
 
-      // Handle SSE streaming
+      // Handle SSE streaming with error recovery
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let assistantContent = '';
@@ -156,39 +198,66 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
       setMessages(prev => [...prev, assistantMessage]);
 
       if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+        try {
+          while (true) {
+            let readResult;
+            try {
+              readResult = await reader.read();
+            } catch (readError) {
+              console.error('Stream read error:', readError);
+              // If we got some content, keep it; otherwise show error
+              if (!assistantContent) {
+                throw new Error('Connection interrupted. Please try again.');
+              }
+              break; // Exit gracefully if we have partial content
+            }
+            
+            const { done, value } = readResult;
+            if (done) break;
 
-          const chunk = decoder.decode(value);
-          // Parse SSE data
-          const lines = chunk.split('\n');
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
-              if (data && data !== '[DONE]') {
-                assistantContent += data;
-                
-                // Check for redirect command
-                const redirectMatch = assistantContent.match(REDIRECT_REGEX);
-                let displayContent = assistantContent;
-                let redirectUrl: string | undefined;
-                
-                if (redirectMatch) {
-                  redirectUrl = redirectMatch[1];
-                  // Remove the redirect command from displayed content
-                  displayContent = assistantContent.replace(REDIRECT_REGEX, '').trim();
+            const chunk = decoder.decode(value, { stream: true });
+            // Parse SSE data
+            const lines = chunk.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data && data !== '[DONE]') {
+                  assistantContent += data;
+                  
+                  // Check for redirect command
+                  const redirectMatch = assistantContent.match(REDIRECT_REGEX);
+                  let displayContent = assistantContent;
+                  let redirectUrl: string | undefined;
+                  
+                  if (redirectMatch) {
+                    redirectUrl = redirectMatch[1];
+                    // Remove the redirect command from displayed content
+                    displayContent = assistantContent.replace(REDIRECT_REGEX, '').trim();
+                  }
+                  
+                  setMessages(prev => 
+                    prev.map(m => 
+                      m.id === assistantMessage.id 
+                        ? { ...m, content: displayContent, redirect: redirectUrl, redirectStatus: redirectUrl ? 'pending' : undefined }
+                        : m
+                    )
+                  );
                 }
-                
-                setMessages(prev => 
-                  prev.map(m => 
-                    m.id === assistantMessage.id 
-                      ? { ...m, content: displayContent, redirect: redirectUrl, redirectStatus: redirectUrl ? 'pending' : undefined }
-                      : m
-                  )
-                );
               }
             }
+          }
+        } catch (streamError) {
+          console.error('Streaming error:', streamError);
+          // Only throw if we have no content at all
+          if (!assistantContent) {
+            throw streamError;
+          }
+        } finally {
+          // Always release the reader
+          try {
+            reader.releaseLock();
+          } catch (e) {
+            // Ignore lock release errors
           }
         }
         
@@ -217,20 +286,63 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
               )
             );
             
+            // Parse the redirect URL to separate path and anchor
+            const [path, anchor] = redirectUrl.split('#');
+            
             // Use Docusaurus router for navigation with proper baseUrl
             // Construct the full URL with baseUrl prefix
-            const fullUrl = baseUrl.endsWith('/') 
-              ? baseUrl.slice(0, -1) + redirectUrl 
-              : baseUrl + redirectUrl;
+            const fullPath = baseUrl.endsWith('/') 
+              ? baseUrl.slice(0, -1) + path 
+              : baseUrl + path;
+            
+            // Navigate to the page with anchor for highlighting
+            const fullUrl = anchor ? `${fullPath}#${anchor}` : fullPath;
             routerHistory.push(fullUrl);
+            
+            // If there's an anchor, scroll to it after a short delay
+            if (anchor) {
+              setTimeout(() => {
+                const element = document.getElementById(anchor);
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }, 500);
+            }
           }, 2000);
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message');
+      let errorMessage = 'Failed to send message';
+      
+      if (err instanceof Error) {
+        errorMessage = err.message;
+        
+        // Provide more helpful messages for common SSL/connection errors
+        if (errorMessage.includes('SSL') || errorMessage.includes('certificate')) {
+          errorMessage = 'Connection security error. Please refresh the page and try again.';
+        } else if (errorMessage.includes('interrupted') || errorMessage.includes('closed')) {
+          errorMessage = 'Connection was interrupted. Please try again.';
+        }
+      }
+      
+      setError(errorMessage);
       console.error('Chat error:', err);
+      
+      // Remove the failed assistant message placeholder if it exists
+      setMessages(prev => prev.filter(m => m.role !== 'assistant' || m.content !== ''));
     } finally {
       setIsLoading(false);
+    }
+  };
+  
+  const retryLastMessage = () => {
+    // Find the last user message and retry
+    const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+    if (lastUserMessage) {
+      setError(null);
+      setInput(lastUserMessage.content);
+      // Remove the last user message so it can be re-sent
+      setMessages(prev => prev.filter(m => m.id !== lastUserMessage.id));
     }
   };
 
@@ -312,7 +424,8 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
               <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.6' }}>
                 <li>Ask for "detailed" or "in-depth" explanations for comprehensive answers</li>
                 <li>Select text on the page for context-aware help</li>
-                <li><strong>🔗 Navigation:</strong> Ask me to redirect you to specific modules (e.g., "take me to module 2")</li>
+                <li><strong>🔗 Navigation:</strong> Ask me to find specific content (e.g., "take me to VSLAM", "find kinematics")</li>
+                <li><strong>📍 Highlighting:</strong> I'll highlight the exact section when I redirect you!</li>
               </ul>
             </div>
           </div>
@@ -359,8 +472,11 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
         
         {error && (
           <div className={styles.error}>
-            {error}
-            <button onClick={() => setError(null)}>Dismiss</button>
+            <span>{error}</span>
+            <div className={styles.errorButtons}>
+              <button onClick={retryLastMessage}>Retry</button>
+              <button onClick={() => setError(null)}>Dismiss</button>
+            </div>
           </div>
         )}
         
