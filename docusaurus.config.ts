@@ -28,12 +28,12 @@ const config: Config = {
     locales: ['en'],
   },
 
-  // Custom fields for API configuration (used in your hooks)
+    // ✅ FIXED: Custom fields (NO hardcoded secrets, NO REACT_APP_)
   customFields: {
-    apiUrl: process.env.REACT_APP_API_URL || 'https://ai-rative-book-backend-production.up.railway.app',
-    apiKey: process.env.REACT_APP_API_KEY || '',
+    apiUrl: process.env.API_URL,
+    apiKey: process.env.API_KEY,
   },
-
+  
   presets: [
     [
       'classic',
