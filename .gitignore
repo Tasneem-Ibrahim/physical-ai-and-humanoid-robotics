@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Node.js/TypeScript
 node_modules/
 dist/
@@ -22,3 +23,6 @@ Thumbs.db
 # Docusaurus
 .docusaurus/
 .cache/
+=======
+node_modules
+>>>>>>> 28fa593d34cb6211446974aa9000d1f388d1fe69
