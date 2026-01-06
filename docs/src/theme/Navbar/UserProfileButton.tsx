@@ -1,3 +1,4 @@
+// src\theme\Navbar\UserProfileButton.tsx
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { useColorMode } from '@docusaurus/theme-common';
 import { AuthContext } from '@site/src/components/AuthContext';
@@ -222,7 +223,7 @@ export default function UserProfileButton(): JSX.Element {
           </button>
           
           <a 
-            href="https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics" 
+            href="https://github.com/Tasneem-Ibrahim" 
             target="_blank" 
             rel="noopener noreferrer"
             className={styles.dropdownItem}

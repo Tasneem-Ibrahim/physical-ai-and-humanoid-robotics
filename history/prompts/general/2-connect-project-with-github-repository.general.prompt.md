@@ -8,7 +8,7 @@ model: claude-sonnet-4-5-20250929
 feature: none
 branch: main
 user: Claude Code
-command: connect this project with this github repo: https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics.git
+command: connect this project with this github repo: https://github.com/Tasneem-Ibrahim
 labels: [git, github, project-setup]
 links:
   spec: null
@@ -23,11 +23,10 @@ tests:
 
 ## Prompt
 
-connect this project with this github repo: https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics.git
-
+connect this project with this github repo: https://github.com/Tasneem-Ibrahim
 ## Response snapshot
 
-I have connected the project with the GitHub repository `https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics.git` as the remote `origin`.
+I have connected the project with the GitHub repository `https://github.com/Tasneem-Ibrahim` as the remote `origin`.
 
 ## Outcome
 

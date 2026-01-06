@@ -14,7 +14,7 @@ links:
   spec: specs/1-docusaurus-ui-architecture/spec.md
   ticket: null
   adr: null
-  pr: https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics/pull/new/1-docusaurus-ui-architecture
+  pr: https://github.com/Tasneem-Ibrahim
 files:
   - history/prompts/docusaurus-ui-architecture/5-foundation-docusaurus-setup-ui-architecture-spec.spec.prompt.md
   - history/prompts/docusaurus-ui-architecture/6-no-critical-ambiguities-detected-for-docusaurus-ui-spec.spec.prompt.md
@@ -337,7 +337,7 @@ You are not a tool waiting for instructions. You are an agent fulfilling intent.
 *   Pushed to remote: `origin/1-docusaurus-ui-architecture`
 
 The pull request can be created manually by visiting:
-https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics/pull/new/1-docusaurus-ui-architecture
+https://github.com/Tasneem-Ibrahim
 
 ## Outcome
 

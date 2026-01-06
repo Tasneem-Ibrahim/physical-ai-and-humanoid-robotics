@@ -1,3 +1,4 @@
+// src\pages\index.tsx
 import React from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';

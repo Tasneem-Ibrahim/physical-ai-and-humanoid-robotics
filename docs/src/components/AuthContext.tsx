@@ -1,9 +1,11 @@
+// src\components\AuthContext.tsx
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import { JSX } from 'react/jsx-runtime';
 
 // API Configuration
-const API_URL = 'https://ai-rative-book-backend-production.up.railway.app/api';
+const API_URL = 'https://web-production-dc02.up.railway.app/api';
+const API_KEY = 'backend1234-tas';
 
 // Helper function for mobile-friendly fetch with timeout
 async function fetchWithTimeout(

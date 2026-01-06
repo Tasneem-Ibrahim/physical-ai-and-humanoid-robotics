@@ -1,3 +1,4 @@
+// docs/docusaurus.config.ts
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
@@ -7,27 +8,30 @@ const config: Config = {
   tagline: 'Bridging the gap between the digital brain and the physical body',
   favicon: 'img/favicon.ico',
 
-  future: {
-    v4: true,
-  },
+  // Set the production url of your site here
+  url: 'https://github.com',
+  // Set the /<baseUrl>/ pathname under which your site is served
+  baseUrl: '/',
 
-  url: 'https://DanielHashmi.github.io',
-  baseUrl: '/physical-ai-and-humanoid-robotics/',
-
-  organizationName: 'DanielHashmi',
+  // GitHub pages deployment config.
+  organizationName: 'Tasneem Ibrahim',
   projectName: 'physical-ai-and-humanoid-robotics',
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
+  // Even if you don't use internalization, you can use this field to set useful
+  // metadata like html lang. For example, if your site is Chinese, you may want
+  // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
 
+  // Custom fields for API configuration (used in your hooks)
   customFields: {
-    apiUrl: process.env.REACT_APP_API_URL || 'https://ai-rative-book-backend-production.up.railway.app',
-    apiKey: process.env.REACT_APP_API_KEY || '',
+    apiUrl: process.env.REACT_APP_API_URL || 'https://web-production-dc02.up.railway.app',
+    apiKey: process.env.REACT_APP_API_KEY || 'backend1234-tas',
   },
 
   presets: [
@@ -36,34 +40,42 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          // Please change this to your repo.
+          editUrl: 'https://github.com/Tasneem-Ibrahim',
         },
-        blog: false,
+        blog: false, // Blog disabled as per textbook structure
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: './src/css/custom.css', // Points to your new Modern Theme
         },
       } satisfies Preset.Options,
     ],
   ],
 
   themeConfig: {
+    // Replace with your project's social card
     image: 'img/social-card.jpg',
+    
+    // We handle dark mode toggle in the UserProfileButton, 
+    // but we keep respectPrefersColorScheme true
     colorMode: {
       defaultMode: 'light',
-      disableSwitch: true, // We handle this in user profile dropdown
+      disableSwitch: true, 
       respectPrefersColorScheme: true,
     },
+
     navbar: {
       title: 'Physical AI',
       logo: {
         alt: 'Physical AI Logo',
-        src: 'img/logo.svg',
+        // Yahan humne naya logo link kar diya hai
+        src: 'img/ai-logo.svg', 
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Course',
+          label: 'Start Learning',
         },
         {
           type: 'dropdown',
@@ -88,25 +100,27 @@ const config: Config = {
             },
           ],
         },
+        // GitHub link is handled via CSS in your custom theme or can be added here
+        {
+          href: 'https://github.com/Tasneem-Ibrahim',
+          label: 'GitHub',
+          position: 'right',
+        },
       ],
     },
     footer: {
-      style: 'light',
+      style: 'light', // Matches your modern theme better
       links: [
         {
-          title: 'Course',
+          title: 'Course Material',
           items: [
             {
               label: 'Introduction',
               to: '/docs',
             },
             {
-              label: 'Module 1: ROS 2',
+              label: 'ROS 2 Setup',
               to: '/docs/module1/week1-intro-physical-ai',
-            },
-            {
-              label: 'Module 2: Simulation',
-              to: '/docs/module2/week6-gazebo',
             },
           ],
         },
@@ -114,12 +128,12 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'BasenAI GitHub',
-              href: 'https://github.com/orgs/basenai/dashboard',
+              label: 'Tasneem Ibrahim GitHub',
+              href: 'https://github.com/Tasneem-Ibrahim',
             },
             {
-              label: 'BasenAI LinkedIn',
-              href: 'https://www.linkedin.com/company/basenai',
+              label: 'LinkedIn',
+              href: 'https://www.linkedin.com/in/tasneem-169351320/',
             },
           ],
         },
@@ -127,13 +141,13 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics',
+              label: 'GitHub Repository',
+              href: 'https://github.com/Tasneem-Ibrahim',
             },
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} Physical AI & Humanoid Robotics. Built for learners.`,
+      copyright: `© ${new Date().getFullYear()} Physical AI & Humanoid Robotics. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

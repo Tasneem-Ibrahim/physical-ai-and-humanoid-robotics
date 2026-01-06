@@ -14,7 +14,7 @@ links:
   spec: null
   ticket: null
   adr: null
-  pr: https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics/pull/new/docs/update-constitution-and-phr
+  pr: https://github.com/Tasneem-Ibrahim
 files:
   - ./.specify/memory/constitution.md
   - CLAUDE.md
@@ -363,7 +363,7 @@ Git operations (branch, commit, push) were completed:
 ⚠️ The pull request could not be created automatically because the `gh` command (GitHub CLI) was not found.
 
 You can manually create the pull request by visiting:
-https://github.com/DanielHashmi/physical-ai-and-humanoid-robotics/pull/new/docs/update-constitution-and-phr
+https://github.com/Tasneem-Ibrahim
 
 ## Outcome
 

@@ -1,3 +1,4 @@
+// src\theme\Navbar\AuthButton.tsx
 import React from 'react';
 
 export default function AuthButton(): JSX.Element {

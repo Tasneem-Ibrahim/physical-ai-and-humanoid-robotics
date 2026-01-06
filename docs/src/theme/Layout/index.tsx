@@ -1,3 +1,4 @@
+// src\theme\Layout\index.tsx
 import React from 'react';
 import Layout from '@theme-original/Layout';
 import { AiChatButton } from '@site/src/components/Chat';
