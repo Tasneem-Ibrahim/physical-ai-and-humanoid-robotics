@@ -28,12 +28,11 @@ const config: Config = {
     locales: ['en'],
   },
 
-    // ✅ FIXED: Custom fields (NO hardcoded secrets, NO REACT_APP_)
+  // Custom fields for API configuration (used in your hooks)
   customFields: {
-    apiUrl: process.env.API_URL,
-    apiKey: process.env.API_KEY,
+    apiUrl: 'https://web-production-dc02.up.railway.app',
   },
-  
+
   presets: [
     [
       'classic',
