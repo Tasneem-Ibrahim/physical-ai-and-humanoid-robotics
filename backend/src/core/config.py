@@ -7,7 +7,7 @@ load_dotenv()
 class Settings:
     def __init__(self):
         # OpenAI Key
-        self.OPENAI_API_KEY: str = self._get_required_env("OPENAI_API_KEY")
+        self.OPENAI_API_KEY: str = self._get_required_env("")
         
         # Database Keys
         self.QDRANT_URL: str = self._get_required_env("QDRANT_URL")

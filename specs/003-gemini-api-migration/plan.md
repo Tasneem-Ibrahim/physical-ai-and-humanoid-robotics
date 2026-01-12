@@ -69,7 +69,7 @@ This plan outlines the technical implementation for migrating the RAG Chatbot Ba
 | File | Change Description |
 |------|-------------------|
 | `rag_chatbot/requirements.txt` | Replace openai with google-generativeai |
-| `rag_chatbot/src/core/config.py` | OPENAI_API_KEY → GEMINI_API_KEY |
+| `rag_chatbot/src/core/config.py` |  → GEMINI_API_KEY |
 | `rag_chatbot/src/services/embedding_service.py` | Use Gemini text-embedding-004 |
 | `rag_chatbot/src/api/chat.py` | Import GeminiTextbookAgent |
 | `rag_chatbot/src/api/content.py` | Use Gemini for personalization/translation |
