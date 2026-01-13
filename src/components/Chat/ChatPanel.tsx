@@ -187,21 +187,29 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
         throw new Error(`API error: ${response.status}`);
       }
 
-      const data = await response.json();
-      
+      const rawText = await response.text();
+
+      // Clean SSE "data:" format
+      const cleanedText = rawText
+        .split('\n')
+        .filter(line => line.startsWith('data:'))
+        .map(line => line.replace('data:', '').trim())
+        .join(' ');
+
       // Replace thinking message with actual response
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === thinkingMessage.id 
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === thinkingMessage.id
             ? {
                 ...msg,
                 id: Date.now().toString(),
-                content: data.response,
+                content: cleanedText || 'No response received.',
                 isThinking: false,
               }
             : msg
         )
       );
+
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
