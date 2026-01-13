@@ -28,14 +28,14 @@ type PanelSize = 'small' | 'medium' | 'large';
 
 // -------------------------------------------------------------------------
 // API Configuration
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? 'http://localhost:8000'
-    : '');
+let API_URL = 'https://simple-hackathon-physical-ai-and-humanoid-roboti-production.up.railway.app' ;
 
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY || '';
+// Agar browser mein 'localhost' likha hai, to Local Backend use karo
+if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+  API_URL = 'http://localhost:8000';
+}
 
+const API_KEY = 'backend1234-tas';
 // -------------------------------------------------------------------------
 
 
@@ -186,29 +186,23 @@ export default function ChatPanel({ isOpen, onClose, selectedText }: ChatPanelPr
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-      // ------------------------------------
-      const rawText = await response.text();
 
-      // Clean SSE "data:" format
-      const cleanedText = rawText
-        .split('\n')
-        .filter(line => line.startsWith('data:'))
-        .map(line => line.replace('data:', '').trim())
-        .join(' ');
-
-      setMessages(prev =>
-        prev.map(msg =>
-          msg.id === thinkingMessage.id
+      const data = await response.json();
+      
+      // Replace thinking message with actual response
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === thinkingMessage.id 
             ? {
                 ...msg,
                 id: Date.now().toString(),
-                content: cleanedText || 'No response received.',
+                content: data.response,
                 isThinking: false,
               }
             : msg
         )
       );
-      // ---------------------------------
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
       // Remove the thinking message on error
